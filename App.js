@@ -13,6 +13,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import MenusScreen from './src/screens/MenusScreen';
 import MenuItemsScreen from './src/screens/MenuItemsScreen';
+import MenuItemScreen from './src/screens/MenuItemScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +24,7 @@ const App: () => Node = () => {
         <Stack.Navigator>
           <Stack.Screen name="Menus" component={MenusScreen} />
           <Stack.Screen name="Menu Items" component={MenuItemsScreen} />
+          <Stack.Screen name="Menu Item" component={MenuItemScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { FlatList, View, Text, StyleSheet } from 'react-native';
 import { ListItem, Avatar } from 'react-native-elements';
+import { useIsFocused } from "@react-navigation/native";
 
 const styles = StyleSheet.create({
   container: {
@@ -19,6 +20,7 @@ export default function MenuItemsScreen({ navigation, route  }) {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [items, setItems] = useState([]);
+  const isFocused = useIsFocused();
 
   // Note: the empty deps array [] means
   // this useEffect will run once
@@ -30,6 +32,7 @@ export default function MenuItemsScreen({ navigation, route  }) {
         (result) => {
           setIsLoaded(true);
           setItems(result);
+          console.log('hete');
         },
         // Note: it's important to handle errors here
         // instead of a catch() block so that we don't swallow
@@ -39,7 +42,7 @@ export default function MenuItemsScreen({ navigation, route  }) {
           setError(error);
         }
       )
-  }, []);
+  }, [isFocused]);
 
   if (error) {
     return <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -55,6 +58,13 @@ export default function MenuItemsScreen({ navigation, route  }) {
         <ListItem 
           key={0} 
           bottomDivider
+          onPress={() => {
+            navigation.navigate({
+              name: 'Menu Item',
+              params: {menuId: route.params.menuId},
+              merge: true, 
+            })
+          }} 
         >
           <ListItem.Content>
             <ListItem.Title><Text>Add Menu Item</Text></ListItem.Title>
@@ -66,7 +76,14 @@ export default function MenuItemsScreen({ navigation, route  }) {
           renderItem={({item}) => (
             <ListItem 
               key={item.id} 
-              bottomDivider
+              bottomDivider 
+              onPress={() => {
+                navigation.navigate({
+                  name: 'Menu Item',
+                  params: {menuId: item.menu_id, menuItemId: item.id},
+                  merge: true, 
+                })
+              }} 
             >
               <ListItem.Content>
                 <Avatar 
@@ -77,7 +94,7 @@ export default function MenuItemsScreen({ navigation, route  }) {
                     alignItems: 'center',
                   }}
                 />
-                <ListItem.Title>{item.title}</ListItem.Title>
+                <ListItem.Title>{item.title} - ${item.price}</ListItem.Title>
                 <ListItem.Subtitle>{item.description}</ListItem.Subtitle>
               </ListItem.Content>
               <ListItem.Chevron />
